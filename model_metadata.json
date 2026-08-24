@@ -1,0 +1,1621 @@
+{
+  "model_name": "Neural Network (calibrated)",
+  "calibration": "isotonic, 3-fold (applied at deployment, not during model comparison)",
+  "threshold": 0.019725355895782972,
+  "threshold_note": "chosen by maximising Youden's J (TPR - FPR) on a grouped validation split held out of the training data",
+  "feature_order": [
+    "ROAD_CLASS",
+    "DISTRICT",
+    "LATITUDE",
+    "LONGITUDE",
+    "ACCLOC",
+    "TRAFFCTL",
+    "VISIBILITY",
+    "LIGHT",
+    "RDSFCOND",
+    "IMPACTYPE",
+    "INVTYPE",
+    "INVAGE",
+    "INITDIR",
+    "VEHTYPE",
+    "PEDESTRIAN",
+    "CYCLIST",
+    "AUTOMOBILE",
+    "MOTORCYCLE",
+    "TRUCK",
+    "TRSN_CITY_VEH",
+    "EMERG_VEH",
+    "PASSENGER",
+    "SPEEDING",
+    "AG_DRIV",
+    "REDLIGHT",
+    "ALCOHOL",
+    "DISABILITY",
+    "HOOD_158",
+    "DIVISION",
+    "HOUR"
+  ],
+  "numeric_features": [
+    "LATITUDE",
+    "LONGITUDE",
+    "PEDESTRIAN",
+    "CYCLIST",
+    "AUTOMOBILE",
+    "MOTORCYCLE",
+    "TRUCK",
+    "TRSN_CITY_VEH",
+    "EMERG_VEH",
+    "PASSENGER",
+    "SPEEDING",
+    "AG_DRIV",
+    "REDLIGHT",
+    "ALCOHOL",
+    "DISABILITY",
+    "HOUR"
+  ],
+  "categorical_features": [
+    "ROAD_CLASS",
+    "DISTRICT",
+    "ACCLOC",
+    "TRAFFCTL",
+    "VISIBILITY",
+    "LIGHT",
+    "RDSFCOND",
+    "IMPACTYPE",
+    "INVTYPE",
+    "INVAGE",
+    "INITDIR",
+    "VEHTYPE",
+    "HOOD_158",
+    "DIVISION"
+  ],
+  "binary_flag_cols": [
+    "PEDESTRIAN",
+    "CYCLIST",
+    "AUTOMOBILE",
+    "MOTORCYCLE",
+    "TRUCK",
+    "TRSN_CITY_VEH",
+    "EMERG_VEH",
+    "PASSENGER",
+    "SPEEDING",
+    "AG_DRIV",
+    "REDLIGHT",
+    "ALCOHOL",
+    "DISABILITY"
+  ],
+  "rare_category_maps": {
+    "ROAD_CLASS": [
+      "Collector",
+      "Local",
+      "Major Arterial",
+      "Minor Arterial",
+      "Other"
+    ],
+    "LIGHT": [
+      "Dark",
+      "Dark, artificial",
+      "Daylight",
+      "Dusk",
+      "Dusk, artificial",
+      "Other"
+    ],
+    "RDSFCOND": [
+      "Dry",
+      "Other",
+      "Wet"
+    ],
+    "VEHTYPE": [
+      "Automobile, Station Wagon",
+      "Bicycle",
+      "Motorcycle",
+      "Municipal Transit Bus (TTC)",
+      "Other",
+      "Pick Up Truck",
+      "Unkown"
+    ],
+    "INVTYPE": [
+      "Cyclist",
+      "Driver",
+      "Motorcycle Driver",
+      "Other",
+      "Other Property Owner",
+      "Passenger",
+      "Pedestrian",
+      "Truck Driver",
+      "Vehicle Owner"
+    ],
+    "TRAFFCTL": [
+      "No Control",
+      "Other",
+      "Pedestrian Crossover",
+      "Stop Sign",
+      "Traffic Signal"
+    ],
+    "VISIBILITY": [
+      "Clear",
+      "Other",
+      "Rain",
+      "Snow"
+    ]
+  },
+  "field_schema": [
+    {
+      "name": "ROAD_CLASS",
+      "type": "categorical",
+      "options": [
+        "Collector",
+        "Local",
+        "Major Arterial",
+        "Minor Arterial",
+        "Other"
+      ],
+      "default": "Major Arterial",
+      "description": "Road type \u2014 arterials vs collectors have different fatality profiles"
+    },
+    {
+      "name": "DISTRICT",
+      "type": "categorical",
+      "options": [
+        "Etobicoke York",
+        "North York",
+        "Scarborough",
+        "Toronto and East York"
+      ],
+      "default": "Toronto and East York",
+      "description": "Geographic district \u2014 captures area-level risk differences"
+    },
+    {
+      "name": "LATITUDE",
+      "type": "numeric",
+      "min": 43.589678,
+      "max": 43.855445,
+      "default": 43.702571,
+      "description": "Geographic coordinate \u2014 spatial clustering of fatal collisions"
+    },
+    {
+      "name": "LONGITUDE",
+      "type": "numeric",
+      "min": -79.63839,
+      "max": -79.122974,
+      "default": -79.396632,
+      "description": "Geographic coordinate \u2014 spatial clustering of fatal collisions"
+    },
+    {
+      "name": "ACCLOC",
+      "type": "categorical",
+      "options": [
+        "At Intersection",
+        "At/Near Private Drive",
+        "Intersection Related",
+        "Laneway",
+        "Non Intersection",
+        "Other",
+        "Overpass or Bridge",
+        "Private Driveway",
+        "Trail",
+        "Underpass or Tunnel",
+        "Unkown"
+      ],
+      "default": "At Intersection",
+      "description": "Accident location type (intersection, mid-block) \u2014 structural risk factor"
+    },
+    {
+      "name": "TRAFFCTL",
+      "type": "categorical",
+      "options": [
+        "No Control",
+        "Other",
+        "Pedestrian Crossover",
+        "Stop Sign",
+        "Traffic Signal"
+      ],
+      "default": "No Control",
+      "description": "Traffic control present \u2014 signals vs uncontrolled affects severity"
+    },
+    {
+      "name": "VISIBILITY",
+      "type": "categorical",
+      "options": [
+        "Clear",
+        "Other",
+        "Rain",
+        "Snow"
+      ],
+      "default": "Clear",
+      "description": "Weather visibility \u2014 rain/snow/fog affect crash severity"
+    },
+    {
+      "name": "LIGHT",
+      "type": "categorical",
+      "options": [
+        "Dark",
+        "Dark, artificial",
+        "Daylight",
+        "Dusk",
+        "Dusk, artificial",
+        "Other"
+      ],
+      "default": "Daylight",
+      "description": "Lighting condition \u2014 dark conditions correlate with higher fatality"
+    },
+    {
+      "name": "RDSFCOND",
+      "type": "categorical",
+      "options": [
+        "Dry",
+        "Other",
+        "Wet"
+      ],
+      "default": "Dry",
+      "description": "Road surface \u2014 wet/icy roads affect collision outcomes"
+    },
+    {
+      "name": "IMPACTYPE",
+      "type": "categorical",
+      "options": [
+        "Angle",
+        "Approaching",
+        "Cyclist Collisions",
+        "Other",
+        "Pedestrian Collisions",
+        "Rear End",
+        "SMV Other",
+        "SMV Unattended Vehicle",
+        "Sideswipe",
+        "Turning Movement"
+      ],
+      "default": "Pedestrian Collisions",
+      "description": "Impact type \u2014 head-on vs sideswipe have very different fatality rates"
+    },
+    {
+      "name": "INVTYPE",
+      "type": "categorical",
+      "options": [
+        "Cyclist",
+        "Driver",
+        "Motorcycle Driver",
+        "Other",
+        "Other Property Owner",
+        "Passenger",
+        "Pedestrian",
+        "Truck Driver",
+        "Vehicle Owner"
+      ],
+      "default": "Driver",
+      "description": "Involvement type \u2014 pedestrians have higher fatality risk than drivers"
+    },
+    {
+      "name": "INVAGE",
+      "type": "categorical",
+      "options": [
+        "0 to 4",
+        "10 to 14",
+        "15 to 19",
+        "20 to 24",
+        "25 to 29",
+        "30 to 34",
+        "35 to 39",
+        "40 to 44",
+        "45 to 49",
+        "5 to 9",
+        "50 to 54",
+        "55 to 59",
+        "60 to 64",
+        "65 to 69",
+        "70 to 74",
+        "75 to 79",
+        "80 to 84",
+        "85 to 89",
+        "90 to 94",
+        "Over 95",
+        "unknown"
+      ],
+      "default": "unknown",
+      "description": "Age group of person involved \u2014 elderly are more vulnerable"
+    },
+    {
+      "name": "INITDIR",
+      "type": "categorical",
+      "options": [
+        "East",
+        "North",
+        "South",
+        "Unknown",
+        "Unkown",
+        "West"
+      ],
+      "default": "Unkown",
+      "description": "Initial direction of travel \u2014 directional collision patterns"
+    },
+    {
+      "name": "VEHTYPE",
+      "type": "categorical",
+      "options": [
+        "Automobile, Station Wagon",
+        "Bicycle",
+        "Motorcycle",
+        "Municipal Transit Bus (TTC)",
+        "Other",
+        "Pick Up Truck",
+        "Unkown"
+      ],
+      "default": "Automobile, Station Wagon",
+      "description": "Vehicle type \u2014 trucks vs cars produce different severity"
+    },
+    {
+      "name": "PEDESTRIAN",
+      "type": "binary",
+      "options": [
+        0,
+        1
+      ],
+      "default": 0,
+      "description": "Binary flag \u2014 pedestrian involvement strongly predicts fatality"
+    },
+    {
+      "name": "CYCLIST",
+      "type": "binary",
+      "options": [
+        0,
+        1
+      ],
+      "default": 0,
+      "description": "Binary flag \u2014 cyclist involvement"
+    },
+    {
+      "name": "AUTOMOBILE",
+      "type": "binary",
+      "options": [
+        0,
+        1
+      ],
+      "default": 1,
+      "description": "Binary flag \u2014 automobile involvement"
+    },
+    {
+      "name": "MOTORCYCLE",
+      "type": "binary",
+      "options": [
+        0,
+        1
+      ],
+      "default": 0,
+      "description": "Binary flag \u2014 motorcycle crashes have high fatality"
+    },
+    {
+      "name": "TRUCK",
+      "type": "binary",
+      "options": [
+        0,
+        1
+      ],
+      "default": 0,
+      "description": "Binary flag \u2014 truck involvement increases severity"
+    },
+    {
+      "name": "TRSN_CITY_VEH",
+      "type": "binary",
+      "options": [
+        0,
+        1
+      ],
+      "default": 0,
+      "description": "Binary flag \u2014 transit/city vehicle involvement"
+    },
+    {
+      "name": "EMERG_VEH",
+      "type": "binary",
+      "options": [
+        0,
+        1
+      ],
+      "default": 0,
+      "description": "Binary flag \u2014 emergency vehicle involvement"
+    },
+    {
+      "name": "PASSENGER",
+      "type": "binary",
+      "options": [
+        0,
+        1
+      ],
+      "default": 0,
+      "description": "Binary flag \u2014 passenger presence"
+    },
+    {
+      "name": "SPEEDING",
+      "type": "binary",
+      "options": [
+        0,
+        1
+      ],
+      "default": 0,
+      "description": "Binary flag \u2014 speeding is a top fatality predictor"
+    },
+    {
+      "name": "AG_DRIV",
+      "type": "binary",
+      "options": [
+        0,
+        1
+      ],
+      "default": 1,
+      "description": "Binary flag \u2014 aggressive driving behaviour"
+    },
+    {
+      "name": "REDLIGHT",
+      "type": "binary",
+      "options": [
+        0,
+        1
+      ],
+      "default": 0,
+      "description": "Binary flag \u2014 running red lights"
+    },
+    {
+      "name": "ALCOHOL",
+      "type": "binary",
+      "options": [
+        0,
+        1
+      ],
+      "default": 0,
+      "description": "Binary flag \u2014 alcohol involvement strongly predicts fatality"
+    },
+    {
+      "name": "DISABILITY",
+      "type": "binary",
+      "options": [
+        0,
+        1
+      ],
+      "default": 0,
+      "description": "Binary flag \u2014 disability involvement"
+    },
+    {
+      "name": "HOOD_158",
+      "type": "categorical",
+      "options": [
+        "1",
+        "10",
+        "100",
+        "101",
+        "102",
+        "103",
+        "105",
+        "106",
+        "107",
+        "108",
+        "109",
+        "11",
+        "110",
+        "111",
+        "112",
+        "113",
+        "114",
+        "115",
+        "116",
+        "118",
+        "119",
+        "12",
+        "120",
+        "121",
+        "122",
+        "123",
+        "124",
+        "125",
+        "126",
+        "128",
+        "129",
+        "13",
+        "130",
+        "133",
+        "134",
+        "135",
+        "136",
+        "138",
+        "139",
+        "140",
+        "141",
+        "142",
+        "143",
+        "144",
+        "145",
+        "146",
+        "147",
+        "148",
+        "149",
+        "15",
+        "150",
+        "151",
+        "152",
+        "153",
+        "154",
+        "155",
+        "156",
+        "157",
+        "158",
+        "159",
+        "16",
+        "160",
+        "161",
+        "162",
+        "163",
+        "164",
+        "165",
+        "166",
+        "167",
+        "168",
+        "169",
+        "170",
+        "171",
+        "172",
+        "173",
+        "174",
+        "18",
+        "19",
+        "2",
+        "20",
+        "21",
+        "22",
+        "23",
+        "24",
+        "25",
+        "27",
+        "28",
+        "29",
+        "3",
+        "30",
+        "31",
+        "32",
+        "33",
+        "34",
+        "35",
+        "36",
+        "37",
+        "38",
+        "39",
+        "4",
+        "40",
+        "41",
+        "42",
+        "43",
+        "44",
+        "46",
+        "47",
+        "48",
+        "49",
+        "5",
+        "50",
+        "52",
+        "53",
+        "54",
+        "55",
+        "56",
+        "57",
+        "58",
+        "59",
+        "6",
+        "60",
+        "61",
+        "62",
+        "63",
+        "64",
+        "65",
+        "66",
+        "67",
+        "68",
+        "69",
+        "7",
+        "70",
+        "71",
+        "72",
+        "73",
+        "74",
+        "78",
+        "79",
+        "8",
+        "80",
+        "81",
+        "83",
+        "84",
+        "85",
+        "86",
+        "87",
+        "88",
+        "89",
+        "9",
+        "90",
+        "91",
+        "92",
+        "94",
+        "95",
+        "96",
+        "97",
+        "98",
+        "99",
+        "NSA"
+      ],
+      "default": "1",
+      "description": "Neighbourhood code \u2014 local area risk proxy"
+    },
+    {
+      "name": "DIVISION",
+      "type": "categorical",
+      "options": [
+        "D11",
+        "D12",
+        "D13",
+        "D14",
+        "D22",
+        "D23",
+        "D31",
+        "D32",
+        "D33",
+        "D41",
+        "D42",
+        "D43",
+        "D51",
+        "D52",
+        "D53",
+        "D55",
+        "NSA"
+      ],
+      "default": "D42",
+      "description": "Police division \u2014 geographic/demographic risk proxy"
+    },
+    {
+      "name": "HOUR",
+      "type": "numeric",
+      "min": 0.0,
+      "max": 23.0,
+      "default": 14.0,
+      "description": ""
+    }
+  ],
+  "target_labels": {
+    "0": "Non-Fatal",
+    "1": "Fatal"
+  },
+  "test_metrics": {
+    "uncalibrated_at_default_threshold": {
+      "Accuracy": 0.8240559440559441,
+      "Precision": 0.3537117903930131,
+      "Recall": 0.32727272727272727,
+      "F1": 0.33997901364113325,
+      "ROC-AUC": 0.7363478945297127
+    },
+    "at_default_threshold": {
+      "Accuracy": 0.853986013986014,
+      "Precision": 0.4425531914893617,
+      "Recall": 0.2101010101010101,
+      "F1": 0.28493150684931506,
+      "ROC-AUC": 0.7397871572871573
+    },
+    "at_deployed_threshold": {
+      "Threshold": "Deployed / Youden J (0.0197)",
+      "Accuracy": 0.6822377622377622,
+      "Precision": 0.2525096525096525,
+      "Recall": 0.6606060606060606,
+      "F1": 0.3653631284916201,
+      "F2": 0.49923664122137407
+    },
+    "threshold_comparison": [
+      {
+        "Threshold": "Default (0.50)",
+        "Accuracy": 0.853986013986014,
+        "Precision": 0.4425531914893617,
+        "Recall": 0.2101010101010101,
+        "F1": 0.28493150684931506,
+        "F2": 0.23476297968397292
+      },
+      {
+        "Threshold": "Deployed / Youden J (0.0197)",
+        "Accuracy": 0.6822377622377622,
+        "Precision": 0.2525096525096525,
+        "Recall": 0.6606060606060606,
+        "F1": 0.3653631284916201,
+        "F2": 0.49923664122137407
+      }
+    ],
+    "saturation_before_calibration": 0.6506293706293707,
+    "saturation_after_calibration": 0.18797202797202797
+  },
+  "threshold_sweep": [
+    {
+      "threshold": 0.01,
+      "precision": 0.25485008818342153,
+      "recall": 0.6689814814814815,
+      "specificity": 0.6477699041267195,
+      "f1": 0.36909323116219667,
+      "f2": 0.5048916841369672,
+      "youden_j": 0.316751385608201
+    },
+    {
+      "threshold": 0.02,
+      "precision": 0.2879581151832461,
+      "recall": 0.6365740740740741,
+      "specificity": 0.716548561900792,
+      "f1": 0.3965392934390771,
+      "f2": 0.5124860231084607,
+      "youden_j": 0.35312263597486604
+    },
+    {
+      "threshold": 0.03,
+      "precision": 0.29292929292929293,
+      "recall": 0.6041666666666666,
+      "specificity": 0.7373905794080867,
+      "f1": 0.3945578231292517,
+      "f2": 0.49828178694158076,
+      "youden_j": 0.34155724607475335
+    },
+    {
+      "threshold": 0.04,
+      "precision": 0.3004750593824228,
+      "recall": 0.5856481481481481,
+      "specificity": 0.7544810337640684,
+      "f1": 0.39717425431711145,
+      "f2": 0.49221789883268485,
+      "youden_j": 0.3401291819122165
+    },
+    {
+      "threshold": 0.05,
+      "precision": 0.3025516403402187,
+      "recall": 0.5763888888888888,
+      "specificity": 0.7607336390162568,
+      "f1": 0.39681274900398406,
+      "f2": 0.4880439043512348,
+      "youden_j": 0.33712252790514563
+    },
+    {
+      "threshold": 0.06,
+      "precision": 0.30586766541822724,
+      "recall": 0.5671296296296297,
+      "specificity": 0.7682367653188829,
+      "f1": 0.39740470397404704,
+      "f2": 0.48438117833135624,
+      "youden_j": 0.3353663949485125
+    },
+    {
+      "threshold": 0.07,
+      "precision": 0.3134920634920635,
+      "recall": 0.5486111111111112,
+      "specificity": 0.783659858274281,
+      "f1": 0.398989898989899,
+      "f2": 0.47705314009661837,
+      "youden_j": 0.33227096938539213
+    },
+    {
+      "threshold": 0.08,
+      "precision": 0.3140161725067385,
+      "recall": 0.5393518518518519,
+      "specificity": 0.78782826177574,
+      "f1": 0.3969335604770017,
+      "f2": 0.4716599190283401,
+      "youden_j": 0.32718011362759175
+    },
+    {
+      "threshold": 0.09,
+      "precision": 0.3163841807909605,
+      "recall": 0.5185185185185185,
+      "specificity": 0.7982492705293872,
+      "f1": 0.3929824561403509,
+      "f2": 0.45977011494252873,
+      "youden_j": 0.3167677890479057
+    },
+    {
+      "threshold": 0.1,
+      "precision": 0.32448377581120946,
+      "recall": 0.5092592592592593,
+      "specificity": 0.8090871196331805,
+      "f1": 0.3963963963963964,
+      "f2": 0.457190357439734,
+      "youden_j": 0.3183463788924398
+    },
+    {
+      "threshold": 0.11,
+      "precision": 0.3328125,
+      "recall": 0.4930555555555556,
+      "specificity": 0.8220091704877033,
+      "f1": 0.39738805970149255,
+      "f2": 0.4497466216216216,
+      "youden_j": 0.3150647260432588
+    },
+    {
+      "threshold": 0.12,
+      "precision": 0.33170731707317075,
+      "recall": 0.4722222222222222,
+      "specificity": 0.8286786160900375,
+      "f1": 0.38968481375358166,
+      "f2": 0.4353393085787452,
+      "youden_j": 0.3009008383122597
+    },
+    {
+      "threshold": 0.13,
+      "precision": 0.34179357021996615,
+      "recall": 0.4675925925925926,
+      "specificity": 0.8378491037932472,
+      "f1": 0.3949169110459433,
+      "f2": 0.43553255713669686,
+      "youden_j": 0.3054416963858398
+    },
+    {
+      "threshold": 0.14,
+      "precision": 0.3418803418803419,
+      "recall": 0.46296296296296297,
+      "specificity": 0.8395164651938307,
+      "f1": 0.39331366764995085,
+      "f2": 0.43233895373973197,
+      "youden_j": 0.30247942815679374
+    },
+    {
+      "threshold": 0.15,
+      "precision": 0.34146341463414637,
+      "recall": 0.4537037037037037,
+      "specificity": 0.842434347644852,
+      "f1": 0.38966202783300197,
+      "f2": 0.4257167680278019,
+      "youden_j": 0.29613805134855575
+    },
+    {
+      "threshold": 0.16,
+      "precision": 0.3409893992932862,
+      "recall": 0.44675925925925924,
+      "specificity": 0.8445185493955815,
+      "f1": 0.3867735470941884,
+      "f2": 0.42066259808195294,
+      "youden_j": 0.29127780865484076
+    },
+    {
+      "threshold": 0.17,
+      "precision": 0.34050179211469533,
+      "recall": 0.4398148148148148,
+      "specificity": 0.846602751146311,
+      "f1": 0.3838383838383838,
+      "f2": 0.41557305336832895,
+      "youden_j": 0.2864175659611258
+    },
+    {
+      "threshold": 0.18,
+      "precision": 0.34191176470588236,
+      "recall": 0.4305555555555556,
+      "specificity": 0.8507711546477699,
+      "f1": 0.38114754098360654,
+      "f2": 0.40933098591549294,
+      "youden_j": 0.28132671020332545
+    },
+    {
+      "threshold": 0.19,
+      "precision": 0.35181644359464626,
+      "recall": 0.42592592592592593,
+      "specificity": 0.8586911213005419,
+      "f1": 0.38534031413612563,
+      "f2": 0.40870724122612173,
+      "youden_j": 0.28461704722646786
+    },
+    {
+      "threshold": 0.2,
+      "precision": 0.3532818532818533,
+      "recall": 0.4236111111111111,
+      "specificity": 0.8603584827011255,
+      "f1": 0.38526315789473686,
+      "f2": 0.40739091718610865,
+      "youden_j": 0.2839695938122366
+    },
+    {
+      "threshold": 0.21,
+      "precision": 0.34714003944773175,
+      "recall": 0.4074074074074074,
+      "specificity": 0.862025844101709,
+      "f1": 0.37486687965921195,
+      "f2": 0.39373601789709173,
+      "youden_j": 0.26943325150911646
+    },
+    {
+      "threshold": 0.22,
+      "precision": 0.3496932515337423,
+      "recall": 0.3958333333333333,
+      "specificity": 0.8674447686536056,
+      "f1": 0.3713355048859935,
+      "f2": 0.38565629228687415,
+      "youden_j": 0.263278101986939
+    },
+    {
+      "threshold": 0.23,
+      "precision": 0.35654008438818563,
+      "recall": 0.3912037037037037,
+      "specificity": 0.8728636932055023,
+      "f1": 0.3730684326710817,
+      "f2": 0.3837420526793824,
+      "youden_j": 0.264067396909206
+    },
+    {
+      "threshold": 0.24,
+      "precision": 0.358974358974359,
+      "recall": 0.3888888888888889,
+      "specificity": 0.8749478949562317,
+      "f1": 0.37333333333333335,
+      "f2": 0.3825136612021858,
+      "youden_j": 0.26383678384512066
+    },
+    {
+      "threshold": 0.25,
+      "precision": 0.36681222707423583,
+      "recall": 0.3888888888888889,
+      "specificity": 0.8791162984576907,
+      "f1": 0.3775280898876405,
+      "f2": 0.38426349496797807,
+      "youden_j": 0.26800518734657963
+    },
+    {
+      "threshold": 0.26,
+      "precision": 0.3741496598639456,
+      "recall": 0.3819444444444444,
+      "specificity": 0.8849520633597332,
+      "f1": 0.37800687285223367,
+      "f2": 0.38035961272475793,
+      "youden_j": 0.2668965078041776
+    },
+    {
+      "threshold": 0.27,
+      "precision": 0.3805104408352668,
+      "recall": 0.37962962962962965,
+      "specificity": 0.8887036265110463,
+      "f1": 0.38006952491309387,
+      "f2": 0.3798054654932839,
+      "youden_j": 0.26833325614067594
+    },
+    {
+      "threshold": 0.28,
+      "precision": 0.38663484486873506,
+      "recall": 0.375,
+      "specificity": 0.8928720300125053,
+      "f1": 0.3807285546415981,
+      "f2": 0.37727061015370283,
+      "youden_j": 0.2678720300125052
+    },
+    {
+      "threshold": 0.29,
+      "precision": 0.385,
+      "recall": 0.35648148148148145,
+      "specificity": 0.89745727386411,
+      "f1": 0.3701923076923077,
+      "f2": 0.3618421052631579,
+      "youden_j": 0.2539387553455915
+    },
+    {
+      "threshold": 0.3,
+      "precision": 0.3973333333333333,
+      "recall": 0.3449074074074074,
+      "specificity": 0.905794080867028,
+      "f1": 0.36926889714993805,
+      "f2": 0.3542558250118878,
+      "youden_j": 0.2507014882744353
+    },
+    {
+      "threshold": 0.31,
+      "precision": 0.44,
+      "recall": 0.33101851851851855,
+      "specificity": 0.9241350562734473,
+      "f1": 0.37780713342140027,
+      "f2": 0.34827082318558206,
+      "youden_j": 0.2551535747919658
+    },
+    {
+      "threshold": 0.32,
+      "precision": 0.46078431372549017,
+      "recall": 0.3263888888888889,
+      "specificity": 0.9312213422259275,
+      "f1": 0.3821138211382114,
+      "f2": 0.3466076696165192,
+      "youden_j": 0.25761023111481635
+    },
+    {
+      "threshold": 0.33,
+      "precision": 0.4981549815498155,
+      "recall": 0.3125,
+      "specificity": 0.9433097123801584,
+      "f1": 0.3840682788051209,
+      "f2": 0.33766883441720863,
+      "youden_j": 0.25580971238015837
+    },
+    {
+      "threshold": 0.34,
+      "precision": 0.5180722891566265,
+      "recall": 0.2986111111111111,
+      "specificity": 0.9499791579824927,
+      "f1": 0.3788546255506608,
+      "f2": 0.3262518968133536,
+      "youden_j": 0.24859026909360382
+    },
+    {
+      "threshold": 0.35,
+      "precision": 0.5384615384615384,
+      "recall": 0.2916666666666667,
+      "specificity": 0.9549812421842434,
+      "f1": 0.3783783783783784,
+      "f2": 0.3211009174311927,
+      "youden_j": 0.24664790885091012
+    },
+    {
+      "threshold": 0.36,
+      "precision": 0.5374449339207048,
+      "recall": 0.2824074074074074,
+      "specificity": 0.9562317632346811,
+      "f1": 0.37025796661608495,
+      "f2": 0.31202046035805625,
+      "youden_j": 0.2386391706420885
+    },
+    {
+      "threshold": 0.37,
+      "precision": 0.5458715596330275,
+      "recall": 0.27546296296296297,
+      "specificity": 0.9587328053355565,
+      "f1": 0.36615384615384616,
+      "f2": 0.3057553956834532,
+      "youden_j": 0.23419576829851946
+    },
+    {
+      "threshold": 0.38,
+      "precision": 0.5406698564593302,
+      "recall": 0.26157407407407407,
+      "specificity": 0.9599833263859942,
+      "f1": 0.35257410296411856,
+      "f2": 0.2916881775942179,
+      "youden_j": 0.22155740046006822
+    },
+    {
+      "threshold": 0.39,
+      "precision": 0.5477386934673367,
+      "recall": 0.2523148148148148,
+      "specificity": 0.9624843684868696,
+      "f1": 0.34548335974643424,
+      "f2": 0.2828230409963674,
+      "youden_j": 0.21479918330168435
+    },
+    {
+      "threshold": 0.4,
+      "precision": 0.558974358974359,
+      "recall": 0.2523148148148148,
+      "specificity": 0.9641517298874531,
+      "f1": 0.34768740031897927,
+      "f2": 0.2834113364534581,
+      "youden_j": 0.21646654470226792
+    },
+    {
+      "threshold": 0.41,
+      "precision": 0.5638297872340425,
+      "recall": 0.24537037037037038,
+      "specificity": 0.9658190912880367,
+      "f1": 0.3419354838709677,
+      "f2": 0.2766179540709812,
+      "youden_j": 0.21118946165840707
+    },
+    {
+      "threshold": 0.42,
+      "precision": 0.5698324022346368,
+      "recall": 0.2361111111111111,
+      "specificity": 0.9679032930387661,
+      "f1": 0.33387888707037644,
+      "f2": 0.26743576297850025,
+      "youden_j": 0.20401440414987726
+    },
+    {
+      "threshold": 0.43,
+      "precision": 0.5771428571428572,
+      "recall": 0.2337962962962963,
+      "specificity": 0.9691538140892039,
+      "f1": 0.33278418451400327,
+      "f2": 0.2653704676826064,
+      "youden_j": 0.20295011038550015
+    },
+    {
+      "threshold": 0.44,
+      "precision": 0.5780346820809249,
+      "recall": 0.23148148148148148,
+      "specificity": 0.9695706544393498,
+      "f1": 0.3305785123966942,
+      "f2": 0.2630194634402946,
+      "youden_j": 0.2010521359208312
+    },
+    {
+      "threshold": 0.45,
+      "precision": 0.5714285714285714,
+      "recall": 0.2222222222222222,
+      "specificity": 0.9699874947894956,
+      "f1": 0.32,
+      "f2": 0.25316455696202533,
+      "youden_j": 0.19220971701171782
+    },
+    {
+      "threshold": 0.46,
+      "precision": 0.5792682926829268,
+      "recall": 0.2199074074074074,
+      "specificity": 0.9712380158399333,
+      "f1": 0.3187919463087248,
+      "f2": 0.2510570824524313,
+      "youden_j": 0.1911454232473407
+    },
+    {
+      "threshold": 0.47,
+      "precision": 0.5864197530864198,
+      "recall": 0.2199074074074074,
+      "specificity": 0.9720716965402251,
+      "f1": 0.31986531986531985,
+      "f2": 0.25132275132275134,
+      "youden_j": 0.1919791039476325
+    },
+    {
+      "threshold": 0.48,
+      "precision": 0.5822784810126582,
+      "recall": 0.21296296296296297,
+      "specificity": 0.972488536890371,
+      "f1": 0.31186440677966104,
+      "f2": 0.24390243902439024,
+      "youden_j": 0.18545149985333395
+    },
+    {
+      "threshold": 0.49,
+      "precision": 0.5796178343949044,
+      "recall": 0.21064814814814814,
+      "specificity": 0.972488536890371,
+      "f1": 0.3089983022071307,
+      "f2": 0.2413793103448276,
+      "youden_j": 0.18313668503851913
+    },
+    {
+      "threshold": 0.5,
+      "precision": 0.5789473684210527,
+      "recall": 0.2037037037037037,
+      "specificity": 0.9733222175906627,
+      "f1": 0.3013698630136986,
+      "f2": 0.23404255319148937,
+      "youden_j": 0.17702592129436648
+    },
+    {
+      "threshold": 0.51,
+      "precision": 0.5827814569536424,
+      "recall": 0.2037037037037037,
+      "specificity": 0.9737390579408086,
+      "f1": 0.3018867924528302,
+      "f2": 0.23416711016498137,
+      "youden_j": 0.17744276164451236
+    },
+    {
+      "threshold": 0.52,
+      "precision": 0.5771812080536913,
+      "recall": 0.19907407407407407,
+      "specificity": 0.9737390579408086,
+      "f1": 0.29604130808950085,
+      "f2": 0.2290889717634523,
+      "youden_j": 0.17281313201488274
+    },
+    {
+      "threshold": 0.53,
+      "precision": 0.5743243243243243,
+      "recall": 0.19675925925925927,
+      "specificity": 0.9737390579408086,
+      "f1": 0.29310344827586204,
+      "f2": 0.226545842217484,
+      "youden_j": 0.17049831720006794
+    },
+    {
+      "threshold": 0.54,
+      "precision": 0.5902777777777778,
+      "recall": 0.19675925925925927,
+      "specificity": 0.9754064193413923,
+      "f1": 0.2951388888888889,
+      "f2": 0.22702991452991453,
+      "youden_j": 0.17216567860065152
+    },
+    {
+      "threshold": 0.55,
+      "precision": 0.5957446808510638,
+      "recall": 0.19444444444444445,
+      "specificity": 0.976240100041684,
+      "f1": 0.2931937172774869,
+      "f2": 0.2247191011235955,
+      "youden_j": 0.1706845444861285
+    },
+    {
+      "threshold": 0.56,
+      "precision": 0.5971223021582733,
+      "recall": 0.19212962962962962,
+      "specificity": 0.9766569403918299,
+      "f1": 0.29071803852889666,
+      "f2": 0.22228173540439208,
+      "youden_j": 0.16878657002145955
+    },
+    {
+      "threshold": 0.57,
+      "precision": 0.5985401459854015,
+      "recall": 0.18981481481481483,
+      "specificity": 0.9770737807419758,
+      "f1": 0.28822495606326887,
+      "f2": 0.21983914209115282,
+      "youden_j": 0.16688859555679064
+    },
+    {
+      "threshold": 0.58,
+      "precision": 0.6090225563909775,
+      "recall": 0.1875,
+      "specificity": 0.9783243017924135,
+      "f1": 0.2867256637168142,
+      "f2": 0.21762493283181086,
+      "youden_j": 0.1658243017924135
+    },
+    {
+      "threshold": 0.59,
+      "precision": 0.6124031007751938,
+      "recall": 0.18287037037037038,
+      "specificity": 0.9791579824927052,
+      "f1": 0.2816399286987522,
+      "f2": 0.21270866989768444,
+      "youden_j": 0.16202835286307568
+    },
+    {
+      "threshold": 0.6,
+      "precision": 0.6171875,
+      "recall": 0.18287037037037038,
+      "specificity": 0.9795748228428511,
+      "f1": 0.28214285714285714,
+      "f2": 0.21282327586206898,
+      "youden_j": 0.16244519321322157
+    },
+    {
+      "threshold": 0.61,
+      "precision": 0.6209677419354839,
+      "recall": 0.17824074074074073,
+      "specificity": 0.980408503543143,
+      "f1": 0.27697841726618705,
+      "f2": 0.20788336933045357,
+      "youden_j": 0.15864924428388372
+    },
+    {
+      "threshold": 0.62,
+      "precision": 0.6166666666666667,
+      "recall": 0.1712962962962963,
+      "specificity": 0.9808253438932889,
+      "f1": 0.26811594202898553,
+      "f2": 0.2002164502164502,
+      "youden_j": 0.15212164018958518
+    },
+    {
+      "threshold": 0.63,
+      "precision": 0.631578947368421,
+      "recall": 0.16666666666666666,
+      "specificity": 0.9824927052938724,
+      "f1": 0.26373626373626374,
+      "f2": 0.19543973941368079,
+      "youden_j": 0.1491593719605391
+    },
+    {
+      "threshold": 0.64,
+      "precision": 0.6261682242990654,
+      "recall": 0.1550925925925926,
+      "specificity": 0.9833263859941642,
+      "f1": 0.24860853432282004,
+      "f2": 0.18256130790190736,
+      "youden_j": 0.13841897858675684
+    },
+    {
+      "threshold": 0.65,
+      "precision": 0.6435643564356436,
+      "recall": 0.15046296296296297,
+      "specificity": 0.9849937473947478,
+      "f1": 0.24390243902439024,
+      "f2": 0.17769272826681246,
+      "youden_j": 0.13545671035771079
+    },
+    {
+      "threshold": 0.66,
+      "precision": 0.6344086021505376,
+      "recall": 0.13657407407407407,
+      "specificity": 0.9858274280950396,
+      "f1": 0.22476190476190477,
+      "f2": 0.16199890170236134,
+      "youden_j": 0.12240150216911366
+    },
+    {
+      "threshold": 0.67,
+      "precision": 0.6373626373626373,
+      "recall": 0.13425925925925927,
+      "specificity": 0.9862442684451855,
+      "f1": 0.22179732313575526,
+      "f2": 0.1594282572842221,
+      "youden_j": 0.12050352770444477
+    },
+    {
+      "threshold": 0.68,
+      "precision": 0.651685393258427,
+      "recall": 0.13425925925925927,
+      "specificity": 0.9870779491454773,
+      "f1": 0.22264875239923224,
+      "f2": 0.15960374243258119,
+      "youden_j": 0.12133720840473655
+    },
+    {
+      "threshold": 0.69,
+      "precision": 0.6588235294117647,
+      "recall": 0.12962962962962962,
+      "specificity": 0.9879116298457691,
+      "f1": 0.21663442940038685,
+      "f2": 0.15444015444015444,
+      "youden_j": 0.11754125947539869
+    },
+    {
+      "threshold": 0.7,
+      "precision": 0.675,
+      "recall": 0.125,
+      "specificity": 0.9891621508962067,
+      "f1": 0.2109375,
+      "f2": 0.14933628318584072,
+      "youden_j": 0.11416215089620675
+    },
+    {
+      "threshold": 0.71,
+      "precision": 0.6623376623376623,
+      "recall": 0.11805555555555555,
+      "specificity": 0.9891621508962067,
+      "f1": 0.20039292730844793,
+      "f2": 0.14127423822714683,
+      "youden_j": 0.1072177064517623
+    },
+    {
+      "threshold": 0.72,
+      "precision": 0.6712328767123288,
+      "recall": 0.11342592592592593,
+      "specificity": 0.9899958315964985,
+      "f1": 0.19405940594059407,
+      "f2": 0.13603553581343697,
+      "youden_j": 0.10342175752242447
+    },
+    {
+      "threshold": 0.73,
+      "precision": 0.6666666666666666,
+      "recall": 0.10648148148148148,
+      "specificity": 0.9904126719466444,
+      "f1": 0.18363273453093812,
+      "f2": 0.12799109627156371,
+      "youden_j": 0.09689415342812592
+    },
+    {
+      "threshold": 0.74,
+      "precision": 0.6865671641791045,
+      "recall": 0.10648148148148148,
+      "specificity": 0.9912463526469362,
+      "f1": 0.1843687374749499,
+      "f2": 0.12813370473537605,
+      "youden_j": 0.0977278341284177
+    },
+    {
+      "threshold": 0.75,
+      "precision": 0.6825396825396826,
+      "recall": 0.09953703703703703,
+      "specificity": 0.9916631929970822,
+      "f1": 0.17373737373737375,
+      "f2": 0.12004466778336124,
+      "youden_j": 0.09120023003411915
+    },
+    {
+      "threshold": 0.76,
+      "precision": 0.6833333333333333,
+      "recall": 0.09490740740740741,
+      "specificity": 0.992080033347228,
+      "f1": 0.16666666666666666,
+      "f2": 0.11465324384787472,
+      "youden_j": 0.08698744075463542
+    },
+    {
+      "threshold": 0.77,
+      "precision": 0.6949152542372882,
+      "recall": 0.09490740740740741,
+      "specificity": 0.9924968736973739,
+      "f1": 0.1670061099796334,
+      "f2": 0.11471740346950196,
+      "youden_j": 0.08740428110478132
+    },
+    {
+      "threshold": 0.78,
+      "precision": 0.7592592592592593,
+      "recall": 0.09490740740740741,
+      "specificity": 0.9945810754481034,
+      "f1": 0.16872427983539096,
+      "f2": 0.11503928170594838,
+      "youden_j": 0.0894884828555108
+    },
+    {
+      "threshold": 0.79,
+      "precision": 0.7592592592592593,
+      "recall": 0.09490740740740741,
+      "specificity": 0.9945810754481034,
+      "f1": 0.16872427983539096,
+      "f2": 0.11503928170594838,
+      "youden_j": 0.0894884828555108
+    },
+    {
+      "threshold": 0.8,
+      "precision": 0.7843137254901961,
+      "recall": 0.09259259259259259,
+      "specificity": 0.9954147561483951,
+      "f1": 0.16563146997929606,
+      "f2": 0.11242270938729623,
+      "youden_j": 0.08800734874098776
+    },
+    {
+      "threshold": 0.81,
+      "precision": 0.8,
+      "recall": 0.09259259259259259,
+      "specificity": 0.995831596498541,
+      "f1": 0.16597510373443983,
+      "f2": 0.1124859392575928,
+      "youden_j": 0.08842418909113364
+    },
+    {
+      "threshold": 0.82,
+      "precision": 0.8,
+      "recall": 0.09259259259259259,
+      "specificity": 0.995831596498541,
+      "f1": 0.16597510373443983,
+      "f2": 0.1124859392575928,
+      "youden_j": 0.08842418909113364
+    },
+    {
+      "threshold": 0.83,
+      "precision": 0.7872340425531915,
+      "recall": 0.08564814814814815,
+      "specificity": 0.995831596498541,
+      "f1": 0.1544885177453027,
+      "f2": 0.10422535211267606,
+      "youden_j": 0.08147974464668921
+    },
+    {
+      "threshold": 0.84,
+      "precision": 0.7872340425531915,
+      "recall": 0.08564814814814815,
+      "specificity": 0.995831596498541,
+      "f1": 0.1544885177453027,
+      "f2": 0.10422535211267606,
+      "youden_j": 0.08147974464668921
+    },
+    {
+      "threshold": 0.85,
+      "precision": 0.7727272727272727,
+      "recall": 0.0787037037037037,
+      "specificity": 0.995831596498541,
+      "f1": 0.14285714285714285,
+      "f2": 0.09593679458239278,
+      "youden_j": 0.07453530020224476
+    },
+    {
+      "threshold": 0.86,
+      "precision": 0.7906976744186046,
+      "recall": 0.0787037037037037,
+      "specificity": 0.9962484368486869,
+      "f1": 0.1431578947368421,
+      "f2": 0.09599096555618294,
+      "youden_j": 0.07495214055239066
+    },
+    {
+      "threshold": 0.87,
+      "precision": 0.7906976744186046,
+      "recall": 0.0787037037037037,
+      "specificity": 0.9962484368486869,
+      "f1": 0.1431578947368421,
+      "f2": 0.09599096555618294,
+      "youden_j": 0.07495214055239066
+    },
+    {
+      "threshold": 0.88,
+      "precision": 0.7804878048780488,
+      "recall": 0.07407407407407407,
+      "specificity": 0.9962484368486869,
+      "f1": 0.13530655391120508,
+      "f2": 0.09044657998869418,
+      "youden_j": 0.07032251092276103
+    },
+    {
+      "threshold": 0.89,
+      "precision": 0.7692307692307693,
+      "recall": 0.06944444444444445,
+      "specificity": 0.9962484368486869,
+      "f1": 0.12738853503184713,
+      "f2": 0.08488964346349745,
+      "youden_j": 0.0656928812931314
+    },
+    {
+      "threshold": 0.9,
+      "precision": 0.8,
+      "recall": 0.06481481481481481,
+      "specificity": 0.9970821175489788,
+      "f1": 0.11991434689507495,
+      "f2": 0.07941009642654566,
+      "youden_j": 0.06189693236379355
+    },
+    {
+      "threshold": 0.91,
+      "precision": 0.8148148148148148,
+      "recall": 0.05092592592592592,
+      "specificity": 0.9979157982492706,
+      "f1": 0.09586056644880174,
+      "f2": 0.06267806267806268,
+      "youden_j": 0.04884172417519645
+    },
+    {
+      "threshold": 0.92,
+      "precision": 0.8333333333333334,
+      "recall": 0.046296296296296294,
+      "specificity": 0.9983326385994165,
+      "f1": 0.08771929824561403,
+      "f2": 0.05707762557077625,
+      "youden_j": 0.044628934895712714
+    },
+    {
+      "threshold": 0.93,
+      "precision": 0.8947368421052632,
+      "recall": 0.03935185185185185,
+      "specificity": 0.9991663192997082,
+      "f1": 0.07538802660753881,
+      "f2": 0.048654836863194044,
+      "youden_j": 0.03851817115156007
+    },
+    {
+      "threshold": 0.94,
+      "precision": 0.8461538461538461,
+      "recall": 0.02546296296296296,
+      "specificity": 0.9991663192997082,
+      "f1": 0.04943820224719101,
+      "f2": 0.03159103963239517,
+      "youden_j": 0.024629282262671172
+    },
+    {
+      "threshold": 0.95,
+      "precision": 1.0,
+      "recall": 0.0023148148148148147,
+      "specificity": 1.0,
+      "f1": 0.004618937644341801,
+      "f2": 0.002891844997108155,
+      "youden_j": 0.0023148148148148147
+    },
+    {
+      "threshold": 0.96,
+      "precision": 1.0,
+      "recall": 0.0023148148148148147,
+      "specificity": 1.0,
+      "f1": 0.004618937644341801,
+      "f2": 0.002891844997108155,
+      "youden_j": 0.0023148148148148147
+    },
+    {
+      "threshold": 0.97,
+      "precision": 1.0,
+      "recall": 0.0023148148148148147,
+      "specificity": 1.0,
+      "f1": 0.004618937644341801,
+      "f2": 0.002891844997108155,
+      "youden_j": 0.0023148148148148147
+    },
+    {
+      "threshold": 0.98,
+      "precision": 0.0,
+      "recall": 0.0,
+      "specificity": 1.0,
+      "f1": 0.0,
+      "f2": 0.0,
+      "youden_j": 0.0
+    },
+    {
+      "threshold": 0.99,
+      "precision": 0.0,
+      "recall": 0.0,
+      "specificity": 1.0,
+      "f1": 0.0,
+      "f2": 0.0,
+      "youden_j": 0.0
+    }
+  ],
+  "sklearn_version": "1.8.0",
+  "pandas_version": "2.3.3",
+  "trained_at": "2026-08-16T22:06:18"
+}

@@ -1,0 +1,273 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>KSI Collision Fatality Predictor</title>
+<style>
+  :root {
+    --bg: #f4f6f8;
+    --panel: #ffffff;
+    --ink: #1c2530;
+    --muted: #5f6b7a;
+    --line: #d9e0e7;
+    --accent: #1f4e79;
+    --fatal: #b3261e;
+    --nonfatal: #1e7a46;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --bg: #12171d; --panel: #1b222b; --ink: #e8edf2; --muted: #9aa7b5;
+      --line: #2d3742; --accent: #6ba3d6; --fatal: #f2938c; --nonfatal: #74d0a0;
+    }
+  }
+  * { box-sizing: border-box; }
+  body {
+    margin: 0; padding: 0 1rem 4rem;
+    font: 15px/1.5 -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+    background: var(--bg); color: var(--ink);
+  }
+  .wrap { max-width: 1080px; margin: 0 auto; }
+  header { padding: 2rem 0 1rem; }
+  h1 { margin: 0 0 .3rem; font-size: 1.6rem; }
+  .sub { color: var(--muted); margin: 0; }
+  .badges { display: flex; flex-wrap: wrap; gap: .5rem; margin-top: 1rem; }
+  .badge {
+    background: var(--panel); border: 1px solid var(--line); border-radius: 999px;
+    padding: .3rem .8rem; font-size: .82rem; color: var(--muted);
+  }
+  .badge b { color: var(--ink); font-weight: 600; }
+  .panel {
+    background: var(--panel); border: 1px solid var(--line); border-radius: 10px;
+    padding: 1.25rem; margin-bottom: 1.25rem;
+  }
+  .panel h2 { margin: 0 0 .2rem; font-size: 1.05rem; }
+  .panel .blurb { color: var(--muted); font-size: .85rem; margin: 0 0 1rem; }
+  .grid {
+    display: grid; gap: .9rem;
+    grid-template-columns: repeat(auto-fill, minmax(230px, 1fr));
+  }
+  label { display: block; font-size: .78rem; font-weight: 600; letter-spacing: .02em; }
+  label .hint { display: block; font-weight: 400; color: var(--muted); font-size: .72rem; margin-top: .15rem; }
+  input, select {
+    width: 100%; margin-top: .35rem; padding: .45rem .5rem;
+    border: 1px solid var(--line); border-radius: 6px;
+    background: var(--bg); color: var(--ink); font-size: .88rem;
+  }
+  .actions { display: flex; flex-wrap: wrap; gap: .75rem; align-items: center; }
+  button {
+    background: var(--accent); color: #fff; border: 0; border-radius: 6px;
+    padding: .6rem 1.4rem; font-size: .95rem; font-weight: 600; cursor: pointer;
+  }
+  button.secondary { background: transparent; color: var(--accent); border: 1px solid var(--line); }
+  .result { border-left: 5px solid var(--accent); }
+  .result.fatal { border-left-color: var(--fatal); }
+  .result.nonfatal { border-left-color: var(--nonfatal); }
+  .verdict { font-size: 1.5rem; font-weight: 700; margin: 0 0 .2rem; }
+  .verdict.fatal { color: var(--fatal); }
+  .verdict.nonfatal { color: var(--nonfatal); }
+  .meter { position: relative; height: 26px; background: var(--bg); border: 1px solid var(--line); border-radius: 5px; margin: 1rem 0 .4rem; overflow: hidden; }
+  .meter .fill { height: 100%; background: var(--accent); opacity: .75; }
+  .meter .mark { position: absolute; top: -4px; bottom: -4px; width: 2px; background: var(--ink); }
+  .meter-labels { display: flex; justify-content: space-between; font-size: .74rem; color: var(--muted); }
+  .warn { background: var(--bg); border: 1px dashed var(--line); border-radius: 6px; padding: .7rem .9rem; margin-top: 1rem; }
+  .warn h3 { margin: 0 0 .4rem; font-size: .8rem; text-transform: uppercase; letter-spacing: .05em; color: var(--muted); }
+  .warn ul { margin: 0; padding-left: 1.1rem; font-size: .82rem; color: var(--muted); }
+  .error { border-left: 5px solid var(--fatal); color: var(--fatal); }
+  table.metrics { border-collapse: collapse; font-size: .85rem; }
+  table.metrics td { padding: .2rem .9rem .2rem 0; color: var(--muted); }
+  table.metrics td b { color: var(--ink); }
+  footer { color: var(--muted); font-size: .8rem; text-align: center; padding-top: 1rem; }
+  code { background: var(--bg); padding: .1rem .35rem; border-radius: 4px; font-size: .85em; }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <header>
+    <h1>KSI Collision Fatality Predictor</h1>
+    <p class="sub">
+      Predicts whether a person involved in a Toronto KSI collision is likely to be
+      <b>Killed</b> rather than seriously injured. One request scores one involved person.
+    </p>
+    <div class="badges">
+      <span class="badge">Model <b>{{ model_name }}</b></span>
+      <span class="badge">Threshold <b>{{ "%.4f"|format(threshold) }}</b></span>
+      <span class="badge">Features <b>{{ n_features }}</b></span>
+      <span class="badge">scikit-learn <b>{{ sklearn_version }}</b></span>
+      <span class="badge">Trained <b>{{ trained_at }}</b></span>
+    </div>
+  </header>
+
+  {% if error %}
+  <div class="panel error"><b>Could not score that record:</b> {{ error }}</div>
+  {% endif %}
+
+  {% if result %}
+  {% set is_fatal = result.prediction == 1 %}
+  <div class="panel result {{ 'fatal' if is_fatal else 'nonfatal' }}">
+    <p class="verdict {{ 'fatal' if is_fatal else 'nonfatal' }}">
+      Predicted: {{ result.label }}
+    </p>
+    <p class="sub">
+      Estimated probability of a fatal outcome:
+      <b>{{ "%.1f"|format(result.probability_fatal * 100) }}%</b> &mdash;
+      classified <b>{{ result.label }}</b> because this is
+      {{ "at or above" if is_fatal else "below" }} the deployed decision threshold of
+      {{ "%.4f"|format(result.threshold) }}.
+    </p>
+
+    <div class="meter">
+      <div class="fill" style="width: {{ result.probability_fatal * 100 }}%"></div>
+      <div class="mark" style="left: {{ result.threshold * 100 }}%" title="decision threshold"></div>
+    </div>
+    <div class="meter-labels">
+      <span>0% &mdash; certainly non-fatal</span>
+      <span>threshold {{ "%.4f"|format(result.threshold) }}</span>
+      <span>100% &mdash; certainly fatal</span>
+    </div>
+
+    {% if result.warnings %}
+    <div class="warn">
+      <h3>Notes on this input</h3>
+      <ul>{% for w in result.warnings %}<li>{{ w }}</li>{% endfor %}</ul>
+    </div>
+    {% endif %}
+  </div>
+  {% endif %}
+
+  <div class="panel">
+    <h2>Load a held-out test record</h2>
+    <p class="blurb">
+      These rows come from the test split and were never used to train the model.
+      Selecting one fills in every field below, so you can compare the prediction
+      against the recorded outcome. Choosing a record only fills the form — it
+      does not change the model, the threshold, or the prediction logic.
+    </p>
+    <p class="blurb">
+      <b>Note on this sample:</b> these {{ samples|length }} records are
+      deliberately enriched with fatal cases so both classes can be demonstrated.
+      They are not representative of the real ~14% fatality rate, so accuracy
+      measured across this dropdown will look worse than the model's actual
+      performance. The honest held-out figures are in the
+      <b>Deployed model</b> panel at the bottom of this page.
+    </p>
+    <div class="actions">
+      <select id="sample-picker" style="max-width: 420px">
+        <option value="">— choose a held-out record —</option>
+        {% for s in samples %}
+        <option value="{{ s.id }}">Record #{{ s.id }}</option>
+        {% endfor %}
+      </select>
+      <span id="sample-actual" class="badge" style="display:none"></span>
+    </div>
+  </div>
+
+  <form method="POST" action="/predict-form" id="predict-form">
+    {% for group in groups %}
+    <div class="panel">
+      <h2>{{ group.title }}</h2>
+      {% if group.blurb %}<p class="blurb">{{ group.blurb }}</p>{% endif %}
+      <div class="grid">
+        {% for f in group.fields %}
+        <div>
+          <label for="{{ f.name }}">
+            {{ f.name }}
+            {% if f.description %}<span class="hint">{{ f.description }}</span>{% endif %}
+            {% if f.type == 'numeric' %}
+            <span class="hint">training range {{ "%g"|format(f.min) }} to {{ "%g"|format(f.max) }}</span>
+            {% endif %}
+          </label>
+
+          {% set current = submitted.get(f.name, f.default) %}
+
+          {% if f.type == 'categorical' %}
+          <select name="{{ f.name }}" id="{{ f.name }}" data-field="{{ f.name }}">
+            {% for opt in f.options %}
+            <option value="{{ opt }}" {% if opt == current|string %}selected{% endif %}>{{ opt }}</option>
+            {% endfor %}
+          </select>
+
+          {% elif f.type == 'binary' %}
+          {# An explicit select, not a checkbox: an unchecked checkbox sends no
+             key at all, which the server would fill with the training default
+             instead of 0 — silently changing the record the user submitted. #}
+          <select name="{{ f.name }}" id="{{ f.name }}" data-field="{{ f.name }}">
+            <option value="0" {% if current|string in ['0', '0.0', 'No'] %}selected{% endif %}>No</option>
+            <option value="1" {% if current|string in ['1', '1.0', 'Yes'] %}selected{% endif %}>Yes</option>
+          </select>
+
+          {% else %}
+          <input type="number" step="any" name="{{ f.name }}" id="{{ f.name }}"
+                 data-field="{{ f.name }}" value="{{ current }}">
+          {% endif %}
+        </div>
+        {% endfor %}
+      </div>
+    </div>
+    {% endfor %}
+
+    <div class="panel actions">
+      <button type="submit">Predict outcome</button>
+      <button type="reset" class="secondary">Reset to defaults</button>
+      <span class="sub" style="font-size:.82rem">
+        Or POST the same fields as JSON to <code>/predict</code>.
+      </span>
+    </div>
+  </form>
+
+  <div class="panel">
+    <h2>Deployed model</h2>
+    <table class="metrics">
+      <tr><td>Algorithm</td><td><b>{{ model_name }}</b></td></tr>
+      <tr><td>Decision threshold</td><td><b>{{ "%.4f"|format(threshold) }}</b> — {{ threshold_note }}</td></tr>
+      {% if metrics.at_deployed_threshold %}
+      {% set m = metrics.at_deployed_threshold %}
+      <tr><td>Test recall (Fatal)</td><td><b>{{ "%.1f"|format(m.Recall * 100) }}%</b></td></tr>
+      <tr><td>Test precision (Fatal)</td><td><b>{{ "%.1f"|format(m.Precision * 100) }}%</b></td></tr>
+      <tr><td>Test F1 / F2</td><td><b>{{ "%.3f"|format(m.F1) }}</b> / <b>{{ "%.3f"|format(m.F2) }}</b></td></tr>
+      <tr><td>Test accuracy</td><td><b>{{ "%.1f"|format(m.Accuracy * 100) }}%</b></td></tr>
+      {% endif %}
+      {% if metrics.at_default_threshold %}
+      <tr><td>ROC-AUC</td><td><b>{{ "%.3f"|format(metrics.at_default_threshold['ROC-AUC']) }}</b></td></tr>
+      {% endif %}
+    </table>
+    <p class="blurb" style="margin-top:1rem">
+      This is a screening aid built on historical collision reports, not a clinical
+      or operational verdict on any individual incident.
+    </p>
+  </div>
+
+  <footer>
+    Endpoints: <code>/predict</code> · <code>/predict/batch</code> ·
+    <code>/schema</code> · <code>/samples</code> · <code>/health</code>
+  </footer>
+</div>
+
+<script>
+  const SAMPLES = {{ samples|tojson }};
+
+  document.getElementById('sample-picker').addEventListener('change', function () {
+    const badge = document.getElementById('sample-actual');
+    const chosen = SAMPLES.find(s => String(s.id) === this.value);
+    if (!chosen) { badge.style.display = 'none'; return; }
+
+    for (const [name, value] of Object.entries(chosen.features)) {
+      const el = document.querySelector(`[data-field="${CSS.escape(name)}"]`);
+      if (!el) continue;
+      if (el.tagName === 'SELECT') {
+        // Binary flags arrive as 0/1 numbers; option values are strings.
+        const wanted = String(value);
+        const match = Array.from(el.options).find(o => o.value === wanted);
+        if (match) el.value = wanted;
+      } else {
+        el.value = value;
+      }
+    }
+
+    badge.textContent = `Recorded outcome for record #${chosen.id}: ${chosen.actual_label}`;
+    badge.style.display = 'inline-block';
+  });
+</script>
+</body>
+</html>

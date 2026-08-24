@@ -1,0 +1,19 @@
+# Public Safety KSI model — training + deployment
+#
+# scikit-learn is pinned exactly. A pickled estimator is not guaranteed to load
+# under a different scikit-learn version: unpickling either raises
+# InconsistentVersionWarning or, worse, silently rebuilds an object whose
+# internals have changed. The API must run on the same version that produced
+# model_bundle.pkl.
+scikit-learn==1.8.0
+
+# Training
+pandas>=2.2,<3
+numpy>=2.0,<3
+matplotlib>=3.8
+seaborn>=0.13
+imbalanced-learn>=0.13,<0.15
+
+# Deployment (Deliverable 5)
+Flask>=3.0,<4
+requests>=2.31

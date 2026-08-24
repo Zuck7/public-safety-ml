@@ -1,0 +1,40 @@
+[startup] Loaded Neural Network (calibrated) (trained 2026-08-16T22:06:18, sklearn 1.8.0)
+[startup] Decision threshold: 0.0197
+[startup] Expecting 30 features
+[startup] 25 held-out test records available at /samples
+ * Serving Flask app 'app'
+ * Debug mode: off
+[31m[1mWARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.[0m
+ * Running on http://127.0.0.1:5000
+[33mPress CTRL+C to quit[0m
+127.0.0.1 - - [16/Aug/2026 22:28:56] "GET / HTTP/1.1" 200 -
+127.0.0.1 - - [16/Aug/2026 22:28:56] "GET / HTTP/1.1" 200 -
+127.0.0.1 - - [16/Aug/2026 22:28:56] "GET / HTTP/1.1" 200 -
+127.0.0.1 - - [16/Aug/2026 22:28:56] "POST /predict-form HTTP/1.1" 200 -
+127.0.0.1 - - [16/Aug/2026 22:33:03] "GET /health HTTP/1.1" 200 -
+127.0.0.1 - - [16/Aug/2026 22:33:03] "GET /samples HTTP/1.1" 200 -
+127.0.0.1 - - [16/Aug/2026 22:33:03] "POST /predict HTTP/1.1" 200 -
+127.0.0.1 - - [16/Aug/2026 22:33:03] "POST /predict/batch HTTP/1.1" 200 -
+127.0.0.1 - - [16/Aug/2026 22:33:03] "POST /predict HTTP/1.1" 200 -
+127.0.0.1 - - [16/Aug/2026 22:33:03] "[31m[1mPOST /predict HTTP/1.1[0m" 400 -
+127.0.0.1 - - [16/Aug/2026 22:33:03] "[31m[1mPOST /predict HTTP/1.1[0m" 400 -
+127.0.0.1 - - [16/Aug/2026 22:33:03] "[31m[1mPOST /predict HTTP/1.1[0m" 400 -
+127.0.0.1 - - [16/Aug/2026 22:33:03] "[33mGET /predikt HTTP/1.1[0m" 404 -
+127.0.0.1 - - [16/Aug/2026 22:33:47] "GET /health HTTP/1.1" 200 -
+127.0.0.1 - - [16/Aug/2026 22:33:47] "GET /samples HTTP/1.1" 200 -
+127.0.0.1 - - [16/Aug/2026 22:33:47] "POST /predict HTTP/1.1" 200 -
+127.0.0.1 - - [16/Aug/2026 22:33:47] "POST /predict/batch HTTP/1.1" 200 -
+127.0.0.1 - - [16/Aug/2026 22:33:47] "POST /predict HTTP/1.1" 200 -
+127.0.0.1 - - [16/Aug/2026 22:33:47] "[31m[1mPOST /predict HTTP/1.1[0m" 400 -
+127.0.0.1 - - [16/Aug/2026 22:33:47] "[31m[1mPOST /predict HTTP/1.1[0m" 400 -
+127.0.0.1 - - [16/Aug/2026 22:33:47] "[31m[1mPOST /predict HTTP/1.1[0m" 400 -
+127.0.0.1 - - [16/Aug/2026 22:33:47] "[33mGET /predikt HTTP/1.1[0m" 404 -
+127.0.0.1 - - [16/Aug/2026 22:38:09] "GET /health HTTP/1.1" 200 -
+127.0.0.1 - - [16/Aug/2026 22:38:09] "GET /samples HTTP/1.1" 200 -
+127.0.0.1 - - [16/Aug/2026 22:38:09] "POST /predict HTTP/1.1" 200 -
+127.0.0.1 - - [16/Aug/2026 22:38:09] "POST /predict/batch HTTP/1.1" 200 -
+127.0.0.1 - - [16/Aug/2026 22:38:09] "POST /predict HTTP/1.1" 200 -
+127.0.0.1 - - [16/Aug/2026 22:38:09] "[31m[1mPOST /predict HTTP/1.1[0m" 400 -
+127.0.0.1 - - [16/Aug/2026 22:38:09] "[31m[1mPOST /predict HTTP/1.1[0m" 400 -
+127.0.0.1 - - [16/Aug/2026 22:38:09] "[31m[1mPOST /predict HTTP/1.1[0m" 400 -
+127.0.0.1 - - [16/Aug/2026 22:38:09] "[33mGET /predikt HTTP/1.1[0m" 404 -
